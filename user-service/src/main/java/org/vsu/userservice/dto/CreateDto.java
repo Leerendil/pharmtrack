@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateDto {
+    @NotBlank(message = "username is required")
+    @Size(min = 3, max = 10, message = "username must be between 3 and 10 characters")
+    private String username;
+
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 10, message = "First name must be between 2 and 10 characters")
     private String firstName;

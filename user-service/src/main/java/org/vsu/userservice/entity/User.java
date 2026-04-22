@@ -20,8 +20,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "keycloak_id", unique = true, nullable = true)
+    @Column(name = "keycloak_id", unique = true, nullable = false)
     private UUID keycloakId;
+
+    @Column(unique = true, nullable = flase)
+    private String username;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
