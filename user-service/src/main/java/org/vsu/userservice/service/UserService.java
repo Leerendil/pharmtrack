@@ -34,10 +34,7 @@ public class UserService {
 
     public UserResponse findByEmail(String email) {
         User entity = userRepository.findByEmail(email)
-                //TODO: Заменить на свой UserNotFoundException()
-                .orElseThrow(() -> {
-                    return new UserNotFoundException("Not found user by email");
-                });
+                .orElseThrow(() -> new UserNotFoundException("Not found user by email"));
 
         return userMapper.mapToResponse(entity);
     }

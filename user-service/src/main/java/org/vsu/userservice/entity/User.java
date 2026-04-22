@@ -23,10 +23,10 @@ public class User {
     @Column(name = "keycloak_id", unique = true, nullable = true)
     private UUID keycloakId;
 
-    @Column(name = "first_name", unique = true, nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", unique = true, nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Column(unique = true, nullable = false)
