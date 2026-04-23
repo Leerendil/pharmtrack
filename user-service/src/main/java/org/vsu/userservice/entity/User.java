@@ -23,7 +23,7 @@ public class User {
     @Column(name = "keycloak_id", unique = true, nullable = false)
     private UUID keycloakId;
 
-    @Column(unique = true, nullable = flase)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(name = "first_name", nullable = false)

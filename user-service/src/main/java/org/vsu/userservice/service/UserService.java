@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.vsu.userservice.dto.CreateDto;
+import org.vsu.userservice.dto.UserDto;
 import org.vsu.userservice.dto.UserResponse;
 import org.vsu.userservice.entity.User;
 import org.vsu.userservice.mapper.UserMapper;
@@ -20,12 +20,12 @@ public class UserService {
     private final UserRepository userRepository;
     public final UserMapper userMapper;
 
-    public UserResponse create(CreateDto createDto) {
-        if (userRepository.existsByEmail(createDto.getEmail())) {
-            throw new UserAlreadyExistsException(createDto.getEmail());
+    public UserResponse create(UserDto userDto) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new UserAlreadyExistsException(userDto.getEmail());
         }
 
-        User entity = userMapper.mapToEntity(createDto);
+        User entity = userMapper.mapToEntity(userDto);
 
         entity = userRepository.save(entity);
 
