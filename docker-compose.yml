@@ -1,4 +1,18 @@
 services:
+  catalog-db:
+    image: postgres:16-alpine
+    container_name: catalog-postgres-dv
+    ports:
+      - "${CATALOG_DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${CATALOG_DB_NAME}
+    volumes:
+      - catalog_db_data:/var/lib/postgresql/data
+    networks:
+      - vsu-network
+
   keycloak-db:
     image: postgres:16-alpine
     container_name: keycloak-postgres-db
@@ -52,5 +66,6 @@ networks:
     driver: bridge
 
 volumes:
+  catalog_db_data:
   keycloak_db_data:
   user-db-data:
