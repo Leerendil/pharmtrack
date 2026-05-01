@@ -11,6 +11,8 @@ import org.vsu.catalogservice.entity.Manufacturer;
 import org.vsu.catalogservice.entity.Medicine;
 import org.vsu.catalogservice.mapper.CatalogMapper;
 import org.vsu.catalogservice.repository.MedicineRepository;
+import org.vsu.catalogservice.utils.exceptions.MedicineAlreadyExistsException;
+import org.vsu.catalogservice.utils.exceptions.MedicineNotFoundException;
 
 @Service
 @Transactional
@@ -31,8 +33,7 @@ public class MedicineService {
                 createRequest.getDosage(),
                 manufacturer
         )) {
-            //TODO: Заменить на свой MedicineAlreadyExistsException();
-            throw new RuntimeException("409");
+            throw new MedicineAlreadyExistsException(createRequest.getName());
         }
 
         Medicine entity = mapper.mapToEntity(createRequest);
@@ -45,8 +46,7 @@ public class MedicineService {
     @Transactional(readOnly = true)
     public MedicineResponse getByName(String name) {
         Medicine entity = medicineRepository.findByName(name)
-                //TODO: Заменить на свой MedicineNotFoundException()
-                .orElseThrow(() -> new RuntimeException("404"));
+                .orElseThrow(() -> new MedicineNotFoundException(name));
 
         return mapper.mapToResponse(entity);
     }

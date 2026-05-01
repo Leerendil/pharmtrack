@@ -8,6 +8,8 @@ import org.vsu.catalogservice.dto.manufacturer.ManufacturerResponse;
 import org.vsu.catalogservice.entity.Manufacturer;
 import org.vsu.catalogservice.mapper.CatalogMapper;
 import org.vsu.catalogservice.repository.ManufacturerRepository;
+import org.vsu.catalogservice.utils.exceptions.ManufacturerAlreadyExistsException;
+import org.vsu.catalogservice.utils.exceptions.ManufacturerNotFoundException;
 
 @Service
 @Transactional
@@ -22,8 +24,7 @@ public class ManufacturerService {
                 createRequest.getName(),
                 createRequest.getCompanyMail())
         ) {
-            //TODO: Заменить на свой ManufacturerAlreadyExistsException()
-            throw new RuntimeException("409");
+            throw new ManufacturerAlreadyExistsException(createRequest.getName());
         }
 
         Manufacturer entity = mapper.mapToEntity(createRequest);
@@ -34,8 +35,7 @@ public class ManufacturerService {
     @Transactional(readOnly = true)
     public Manufacturer getByName(String name) {
         Manufacturer entity = manufacturerRepository.findByName(name)
-                //TODO: Заменить на свой ManucaturerNotFoundException()
-                .orElseThrow(() -> new RuntimeException("404"));
+                .orElseThrow(() -> new ManufacturerNotFoundException(name));
 
         return entity;
     }

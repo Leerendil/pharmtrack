@@ -8,6 +8,8 @@ import org.vsu.catalogservice.dto.category.CategoryResponse;
 import org.vsu.catalogservice.entity.Category;
 import org.vsu.catalogservice.mapper.CatalogMapper;
 import org.vsu.catalogservice.repository.CategoryRepository;
+import org.vsu.catalogservice.utils.exceptions.CategoryAlreadyExistsException;
+import org.vsu.catalogservice.utils.exceptions.CategoryNotFoundException;
 
 @Service
 @Transactional
@@ -18,8 +20,7 @@ public class CategoryService {
 
     public CategoryResponse create(CategoryCreateRequest createRequest) {
         if (categoryRepository.existsByName(createRequest.getName())) {
-            //TODO: Заменить на свой CategoryAlreadyExistsException()
-            throw new RuntimeException("409");
+            throw new CategoryAlreadyExistsException(createRequest.getName());
         }
 
         Category entity = mapper.mapToEntity(createRequest);
@@ -30,8 +31,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public Category getByName(String name) {
         Category entity = categoryRepository.findByName(name)
-                //TODO: Заменить на свйо CategoryNotFoundException()
-                .orElseThrow(() -> new RuntimeException("404"));
+                .orElseThrow(() -> new CategoryNotFoundException(name));
 
         return entity;
     }
