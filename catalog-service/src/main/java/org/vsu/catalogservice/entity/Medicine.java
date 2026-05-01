@@ -1,5 +1,6 @@
 package org.vsu.catalogservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

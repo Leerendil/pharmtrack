@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.vsu.catalogservice.entity.Manufacturer;
 import org.vsu.catalogservice.entity.Medicine;
 
-import java.lang.ScopedValue;
 import java.util.Optional;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {

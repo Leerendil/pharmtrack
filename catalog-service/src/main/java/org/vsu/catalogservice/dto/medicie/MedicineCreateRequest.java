@@ -24,7 +24,7 @@ public class MedicineCreateRequest {
 
     private boolean isPrescriptionRequired;
 
-    private Category category;
+    private String categoryName;
 
-    private Manufacturer manufacturer;
+    private String manufacturerName;
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.vsu.catalogservice.dto.category.CategoryCreateRequest;
 import org.vsu.catalogservice.dto.category.CategoryResponse;
+import org.vsu.catalogservice.entity.Category;
 import org.vsu.catalogservice.service.CategoryService;
 
 import static org.vsu.catalogservice.utils.constants.CatalogConstants.API_V1_CATEGORIES;
@@ -24,7 +25,7 @@ public class CategoryController {
     }
 
     @GetMapping(NAME)
-    public ResponseEntity<CategoryResponse> getByName(@PathVariable("name") String name) {
+    public ResponseEntity<Category> getByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(categoryService.getByName(name));
     }
 }

@@ -32,11 +32,12 @@ public class ManufacturerService {
     }
 
     @Transactional(readOnly = true)
-    public ManufacturerResponse getByName(String name) {
+    public Manufacturer getByName(String name) {
         Manufacturer entity = manufacturerRepository.findByName(name)
                 //TODO: Заменить на свой ManucaturerNotFoundException()
                 .orElseThrow(() -> new RuntimeException("404"));
 
-        return mapper.mapToResponse(entity);
+        return entity;
     }
+
 }

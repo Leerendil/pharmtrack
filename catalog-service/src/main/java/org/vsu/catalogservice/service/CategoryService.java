@@ -28,11 +28,12 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponse getByName(String name) {
+    public Category getByName(String name) {
         Category entity = categoryRepository.findByName(name)
                 //TODO: Заменить на свйо CategoryNotFoundException()
                 .orElseThrow(() -> new RuntimeException("404"));
 
-        return mapper.mapToResponse(entity);
+        return entity;
     }
+
 }

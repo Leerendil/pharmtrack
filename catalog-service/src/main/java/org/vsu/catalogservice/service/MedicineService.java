@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.vsu.catalogservice.dto.medicie.MedicineCreateRequest;
 import org.vsu.catalogservice.dto.medicie.MedicineResponse;
+import org.vsu.catalogservice.entity.Category;
+import org.vsu.catalogservice.entity.Manufacturer;
 import org.vsu.catalogservice.entity.Medicine;
 import org.vsu.catalogservice.mapper.CatalogMapper;
 import org.vsu.catalogservice.repository.MedicineRepository;
@@ -15,20 +17,27 @@ import org.vsu.catalogservice.repository.MedicineRepository;
 @RequiredArgsConstructor
 public class MedicineService {
     private final MedicineRepository medicineRepository;
+    private final ManufacturerService manufacturerService;
+    private final CategoryService categoryService;
     private final CatalogMapper mapper;
 
     public MedicineResponse create(MedicineCreateRequest createRequest) {
 
+        Manufacturer manufacturer = manufacturerService.getByName(createRequest.getManufacturerName());
+        Category category = categoryService.getByName(createRequest.getCategoryName());
+
         if (medicineRepository.existsByNameAndDosageAndManufacturer(
                 createRequest.getName(),
                 createRequest.getDosage(),
-                createRequest.getManufacturer())
-        ) {
+                manufacturer
+        )) {
             //TODO: Заменить на свой MedicineAlreadyExistsException();
             throw new RuntimeException("409");
         }
 
         Medicine entity = mapper.mapToEntity(createRequest);
+        entity.setManufacturer(manufacturer);
+        entity.setCategory(category);
 
         return mapper.mapToResponse(medicineRepository.save(entity));
     }

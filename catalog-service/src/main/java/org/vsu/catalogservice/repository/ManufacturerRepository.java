@@ -9,4 +9,6 @@ public interface ManufacturerRepository extends JpaRepository<Manufacturer, Long
     boolean existsByNameAndCompanyMail(String name, String companyMail);
 
     Optional<Manufacturer> findByName(String name);
+
+    boolean existsByName(String name);
 }

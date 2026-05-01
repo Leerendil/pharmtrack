@@ -1,5 +1,6 @@
 package org.vsu.catalogservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ public class Manufacturer {
     private String companyMail;
 
     @Builder.Default
+    @JsonIgnore
     @OneToMany(mappedBy = "manufacturer", fetch = FetchType.LAZY)
     private List<Medicine> medicines = new ArrayList<>();
 }

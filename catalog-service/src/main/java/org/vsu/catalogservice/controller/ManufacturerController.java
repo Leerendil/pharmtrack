@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.vsu.catalogservice.dto.manufacturer.ManufacturerCreateRequest;
 import org.vsu.catalogservice.dto.manufacturer.ManufacturerResponse;
+import org.vsu.catalogservice.entity.Manufacturer;
 import org.vsu.catalogservice.service.ManufacturerService;
 
 import static org.vsu.catalogservice.utils.constants.CatalogConstants.API_V1_MANUFACTURERS;
@@ -24,7 +25,7 @@ public class ManufacturerController {
     }
 
     @GetMapping(NAME)
-    public ResponseEntity<ManufacturerResponse> getByName(@PathVariable("name") String name) {
+    public ResponseEntity<Manufacturer> getByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(manufacturerService.getByName(name));
     }
 }
