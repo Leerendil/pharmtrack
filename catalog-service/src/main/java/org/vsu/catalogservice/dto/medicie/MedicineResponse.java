@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MedicineResponse {
+    private Long id;
+
     private String name;
 
     private String description;

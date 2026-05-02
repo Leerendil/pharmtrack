@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.vsu.catalogservice.dto.medicie.MedicineCreateRequest;
@@ -30,7 +31,8 @@ public class MedicineService {
     private final CategoryService categoryService;
     private final CatalogMapper mapper;
 
-    public MedicineResponse create(MedicineCreateRequest createRequest) {
+    public MedicineResponse create(MedicineCreateRequest createRequest, Jwt jwt) {
+
 
         Manufacturer manufacturer = manufacturerService.getByName(createRequest.getManufacturerName());
         Category category = categoryService.getByName(createRequest.getCategoryName());

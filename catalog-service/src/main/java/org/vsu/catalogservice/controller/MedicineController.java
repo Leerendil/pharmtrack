@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.vsu.catalogservice.dto.medicie.MedicineCreateRequest;
 import org.vsu.catalogservice.dto.medicie.MedicineResponse;
@@ -26,8 +28,8 @@ public class MedicineController {
     private final MedicineService medicineService;
 
     @PostMapping
-    public ResponseEntity<MedicineResponse> create(@RequestBody @Valid MedicineCreateRequest createRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(medicineService.create(createRequest));
+    public ResponseEntity<MedicineResponse> create(@RequestBody @Valid MedicineCreateRequest createRequest, @AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(medicineService.create(createRequest, jwt));
     }
 
     @GetMapping(NAME)

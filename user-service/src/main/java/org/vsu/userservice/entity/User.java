@@ -36,6 +36,12 @@ public class User {
     @Email
     private String email;
 
+    @Column(nullable = false)
+    private Roles role;
+
+    @Column(nullable = false)
+    private boolean isDeactivated;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
