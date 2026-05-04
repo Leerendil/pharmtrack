@@ -21,6 +21,8 @@ import java.util.List;
 
 import static org.vsu.catalogservice.utils.constants.CatalogConstants.*;
 
+//TODO: Добавить delete() метод
+//TODO: Добавить change() метод
 @RestController
 @RequestMapping(API_V1_MEDICINES)
 @RequiredArgsConstructor

@@ -11,6 +11,8 @@ import org.vsu.catalogservice.repository.CategoryRepository;
 import org.vsu.catalogservice.utils.exceptions.CategoryAlreadyExistsException;
 import org.vsu.catalogservice.utils.exceptions.CategoryNotFoundException;
 
+//TODO: Добавить delete() метод
+//TODO: Добавить change() метод
 @Service
 @Transactional
 @RequiredArgsConstructor
