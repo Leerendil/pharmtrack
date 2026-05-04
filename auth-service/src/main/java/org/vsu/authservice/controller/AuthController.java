@@ -1,18 +1,20 @@
-package org.vsu.authservice.auth.controller;
+package org.vsu.authservice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.vsu.authservice.auth.dto.LoginDto;
-import org.vsu.authservice.auth.dto.RegisterDto;
-import org.vsu.authservice.auth.dto.UserResponse;
-import org.vsu.authservice.auth.service.AuthService;
+import org.vsu.authservice.dto.AssignRoleDto;
+import org.vsu.authservice.dto.LoginDto;
+import org.vsu.authservice.dto.RegisterDto;
+import org.vsu.authservice.dto.UserResponse;
+import org.vsu.authservice.service.AuthService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -28,5 +30,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AccessTokenResponse> register(@RequestBody @Valid LoginDto loginDto) {
         return ResponseEntity.ok(authService.login(loginDto));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/roles/assign")
+    public ResponseEntity<String> assignRoleToUser(@RequestBody @Valid AssignRoleDto roleDto) {
+        return ResponseEntity.ok(authService.assignRoleToUser(roleDto.getKeycloakId(), roleDto.getRoleName()));
     }
 }

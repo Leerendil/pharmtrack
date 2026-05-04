@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.vsu.catalogservice.clients.AuthServiceClient;
+import org.vsu.catalogservice.dto.AssignRoleDto;
 import org.vsu.catalogservice.dto.manufacturer.ManufacturerCreateRequest;
 import org.vsu.catalogservice.entity.Application;
 import org.vsu.catalogservice.entity.Outbox;
@@ -25,6 +27,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
+    private final AuthServiceClient authServiceClient;
 
     public void save(UUID applicationToken, ManufacturerCreateRequest createRequest) {
         try {
@@ -70,6 +73,13 @@ public class ApplicationService {
         }
 
         entity = applicationRepository.save(entity);
+
+        authServiceClient.assignRoleToUser(
+                AssignRoleDto.builder()
+                        .keycloakId(entity.getApplicantId().toString())
+                        .roleName("MANUFACTURER")
+                        .build()
+        );
 
         return "Application has been managed! Current status: " + entity.getStatus();
     }

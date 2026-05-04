@@ -31,7 +31,7 @@ public class Application {
     @Column(name = "applicant_id", nullable = false, unique = true)
     private UUID applicantId;
 
-    @Column
+    @Column(name = "status")
     private ApplicationStatus status;
 
     @Column(name = "created_at")
