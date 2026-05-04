@@ -8,6 +8,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ApplicationMalfunctionException.class)
+    public ResponseEntity<ErrorResponse> handleApplicationMalfunctionException(ApplicationMalfunctionException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .responseCode(500)
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    @ExceptionHandler(KafkaMalfunctionExecution.class)
+    public ResponseEntity<ErrorResponse> handleKafkaMalfunctionExecution(KafkaMalfunctionExecution ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .responseCode(503)
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
+    }
+
     @ExceptionHandler({
             MedicineAlreadyExistsException.class,
             ManufacturerAlreadyExistsException.class,
@@ -25,7 +45,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             MedicineNotFoundException.class,
             ManufacturerNotFoundException.class,
-            CategoryNotFoundException.class
+            CategoryNotFoundException.class,
+            ApplicationNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()

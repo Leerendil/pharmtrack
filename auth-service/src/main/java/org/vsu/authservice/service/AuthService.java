@@ -105,4 +105,18 @@ public class AuthService {
             throw new KeycloakLoginException();
         }
     }
+
+    public String assignRoleToUser(String keycloakId, String roleName) {
+        var userResource = keycloakAdminClient.realm(realm).users().get(keycloakId);
+
+        String clientUuid = keycloakAdminClient.realm(realm).clients()
+                .findByClientId(clientId).get(0).getId();
+
+        var role = keycloakAdminClient.realm(realm).clients()
+                .get(clientUuid).roles().get(roleName).toRepresentation();
+
+        userResource.roles().clientLevel(clientUuid).add(List.of(role));
+
+        return "Role successfully assigned!";
+    }
 }

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,4 +23,6 @@ public class ManufacturerCreateRequest {
     @NotBlank(message = "Field (companyMail) must not be empty")
     @Email
     private String companyMail;
+
+    private UUID applicantId;
 }
