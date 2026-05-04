@@ -72,4 +72,9 @@ public class MedicineService {
 
         return pageOfEntities.map(mapper::mapToResponse);
     }
+
+    public void delete(Long id) {
+        Medicine medicine = medicineRepository.findById(id)
+                .orElseThrow(() -> new MedicineNotFoundException("id: "+id));
+    }
 }

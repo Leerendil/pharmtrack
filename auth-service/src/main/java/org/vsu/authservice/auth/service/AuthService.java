@@ -1,4 +1,4 @@
-package org.vsu.authservice.service;
+package org.vsu.authservice.auth.service;
 
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,10 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.vsu.authservice.clients.UserServiceClient;
-import org.vsu.authservice.dto.RegisterDto;
-import org.vsu.authservice.dto.LoginDto;
-import org.vsu.authservice.dto.UserDto;
-import org.vsu.authservice.dto.UserResponse;
+import org.vsu.authservice.auth.dto.RegisterDto;
+import org.vsu.authservice.auth.dto.LoginDto;
+import org.vsu.authservice.auth.dto.UserDto;
+import org.vsu.authservice.auth.dto.UserResponse;
 import org.vsu.authservice.utils.exceptions.KeycloakLoginException;
 import org.vsu.authservice.utils.exceptions.KeycloakRegisterException;
 import org.vsu.authservice.utils.exceptions.UserAlreadyExistsException;

@@ -1,4 +1,4 @@
-package org.vsu.authservice.dto;
+package org.vsu.authservice.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponse {
-    private int responseCode;
-    private String message;
+public class UserResponse {
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
 }

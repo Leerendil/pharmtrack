@@ -1,4 +1,4 @@
-package org.vsu.authservice.dto;
+package org.vsu.authservice.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
-    private String username;
-    private String rawPassword;
+public class ErrorResponse {
+    private int responseCode;
+    private String message;
 }

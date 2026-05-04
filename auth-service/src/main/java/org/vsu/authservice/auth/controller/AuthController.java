@@ -1,4 +1,4 @@
-package org.vsu.authservice.controller;
+package org.vsu.authservice.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.vsu.authservice.dto.LoginDto;
-import org.vsu.authservice.dto.RegisterDto;
-import org.vsu.authservice.dto.UserDto;
-import org.vsu.authservice.dto.UserResponse;
-import org.vsu.authservice.service.AuthService;
+import org.vsu.authservice.auth.dto.LoginDto;
+import org.vsu.authservice.auth.dto.RegisterDto;
+import org.vsu.authservice.auth.dto.UserResponse;
+import org.vsu.authservice.auth.service.AuthService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
