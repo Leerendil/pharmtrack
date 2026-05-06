@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.vsu.orderservice.entity.CartItem;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,14 +33,19 @@ public class CartService {
                 .toList();
     }
 
-    public void removeListOfItems(Jwt jwt, List<CartItem> itemList) {
+    public boolean removeListOfItems(Jwt jwt, int[] ids) {
         String buyerId = jwt.getSubject();
-        Object[] ids = itemList.stream().map(el -> el.getMedicineId().toString()).toArray();
+
+        Object[] stringIds = Arrays.stream(ids)
+                .mapToObj(String::valueOf)
+                .toArray();
 
         redisTemplate.opsForHash().delete(key(buyerId), ids);
+
+        return true;
     }
 
-    public void addItem(Jwt jwt, CartItem item) {
+    public boolean addItem(Jwt jwt, CartItem item) {
         try {
             String buyerId = jwt.getSubject();
             String medicineId = item.getMedicineId().toString();
@@ -50,18 +56,23 @@ public class CartService {
             //TODO: Заменить на свой FaildeToAddItemException()
             throw new RuntimeException("500");
         }
+
+        return true;
     }
 
-    public void removeItem(Jwt jwt, CartItem item) {
+    public boolean removeItem(Jwt jwt, String medicineId) {
         String buyerId = jwt.getSubject();
-        String medicineId = item.getMedicineId().toString();
 
         redisTemplate.opsForHash().delete(key(buyerId), medicineId);
+
+        return true;
     }
 
-    public void clearCart(Jwt jwt) {
+    public boolean clearCart(Jwt jwt) {
         String buyerId = jwt.getSubject();
         redisTemplate.delete(key(buyerId));
+
+        return true;
     }
 
 }
