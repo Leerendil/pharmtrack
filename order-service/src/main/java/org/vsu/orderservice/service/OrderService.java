@@ -12,9 +12,7 @@ import org.vsu.orderservice.mapper.OrderMapper;
 import org.vsu.orderservice.repository.OrderRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.vsu.orderservice.entity.enums.OrderStatus.CREATED;
 
@@ -32,16 +30,16 @@ public class OrderService {
         List<CartItem> cartItems = cartService.getAllCart(jwt);
 
         BigDecimal totalPrice = BigDecimal.ZERO;
-        List<Long> medicinesIds = new ArrayList<>();
+        Map<Long, Integer> medicines = new HashMap<>();
         for (CartItem item : cartItems) {
             BigDecimal itemPrice = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
             totalPrice = totalPrice.add(itemPrice);
-            medicinesIds.add(item.getMedicineId());
+            medicines.put(item.getMedicineId(), item.getQuantity());
         }
 
         Order entity = Order.builder()
                 .buyerId(UUID.fromString(buyerId))
-                .medicinesIds(medicinesIds)
+                .medicinesIds(medicines)
                 .totalPrice(totalPrice)
                 .status(CREATED)
                 .build();

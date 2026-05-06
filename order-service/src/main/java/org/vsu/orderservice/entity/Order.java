@@ -8,6 +8,7 @@ import org.vsu.orderservice.entity.enums.OrderStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +32,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id")
     )
     @Column(name = "medicines_ids")
-    List<Long> medicinesIds;
+    Map<Long, Integer> medicinesIds;
 
     @Column(nullable = false)
     private OrderStatus status;
