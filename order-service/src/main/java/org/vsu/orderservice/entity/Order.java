@@ -25,7 +25,12 @@ public class Order {
     @Column(name = "buyer_id", nullable = false)
     private UUID buyerId;
 
-    @Column(name = "medicines_ids", nullable = false)
+    @ElementCollection
+    @CollectionTable(
+            name = "order_medicines",
+            joinColumns = @JoinColumn(name = "order_id")
+    )
+    @Column(name = "medicines_ids")
     List<Long> medicinesIds;
 
     @Column(nullable = false)

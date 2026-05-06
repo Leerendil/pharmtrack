@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItem implements Serializable {
-    private UUID medicineId;
+    private Long medicineId;
     private String name;
     private int quantity;
     private BigDecimal price;
