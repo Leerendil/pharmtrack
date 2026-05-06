@@ -7,9 +7,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.vsu.orderservice.entity.CartItem;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +29,26 @@ public class CartService {
         return medicines.values().stream()
                 .map(value -> objectMapper.convertValue(value, CartItem.class))
                 .toList();
+    }
+
+    public void addItem(Jwt jwt, CartItem item) {
+        String buyerId = jwt.getSubject();
+        String medicineId = item.getMedicineId().toString();
+
+        redisTemplate.opsForHash().put(key(buyerId), medicineId, item.toString());
+        redisTemplate.expire(key(buyerId), Duration.ofDays(7));
+    }
+
+    public void removeItem(Jwt jwt, CartItem item) {
+        String buyerId = jwt.getSubject();
+        String medicineId = item.getMedicineId().toString();
+
+        redisTemplate.opsForHash().delete(key(buyerId), medicineId);
+    }
+
+    public void clearCart(Jwt jwt) {
+        String buyerId = jwt.getSubject();
+        redisTemplate.delete(key(buyerId));
     }
 
 }
