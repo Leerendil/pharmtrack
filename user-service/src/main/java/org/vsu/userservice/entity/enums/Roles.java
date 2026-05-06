@@ -1,4 +1,4 @@
-package org.vsu.userservice.entity;
+package org.vsu.userservice.entity.enums;
 
 public enum Roles {
     USER,

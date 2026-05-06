@@ -23,6 +23,7 @@ import static org.vsu.catalogservice.utils.constants.CatalogConstants.*;
 
 //TODO: Добавить delete() метод
 //TODO: Добавить change() метод
+//TODO: Добавить метод getById(); Уменьшить количество информации выдаваемой методом search()
 @RestController
 @RequestMapping(API_V1_MEDICINES)
 @RequiredArgsConstructor
