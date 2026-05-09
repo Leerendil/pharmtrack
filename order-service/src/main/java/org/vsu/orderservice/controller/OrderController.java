@@ -30,6 +30,6 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping
     public ResponseEntity<OrderResponse> changeOrderStatus(OrderStatusUpdate updateDto) {
-        return ResponseEntity.ok(orderService.changeOrderStatus(updateDto));
+        return ResponseEntity.ok(orderService.superviseOrderStatus(updateDto));
     }
 }

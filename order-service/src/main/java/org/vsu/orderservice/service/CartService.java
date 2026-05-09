@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.vsu.orderservice.clients.CatalogClientService;
+import org.vsu.orderservice.dto.MedicineBasicInfo;
 import org.vsu.orderservice.entity.CartItem;
 import org.vsu.orderservice.utils.exceptions.FailedToAddItemException;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class CartService {
+    private final CatalogClientService catalogClientService;
     private final StringRedisTemplate redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -41,12 +44,18 @@ public class CartService {
                 .mapToObj(String::valueOf)
                 .toArray();
 
-        redisTemplate.opsForHash().delete(key(buyerId), ids);
+        redisTemplate.opsForHash().delete(key(buyerId), stringIds);
 
         return true;
     }
 
     public boolean addItem(Jwt jwt, CartItem item) {
+        MedicineBasicInfo medicineBasicInfo = catalogClientService.getById(item.getMedicineId()).getBody();
+
+        if (medicineBasicInfo.getPrice().compareTo(item.getPrice()) != 0) {
+            return false;
+        }
+
         try {
             String buyerId = jwt.getSubject();
             String medicineId = item.getMedicineId().toString();

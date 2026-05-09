@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.vsu.catalogservice.dto.medicie.MedicineBasicInfo;
 import org.vsu.catalogservice.dto.medicie.MedicineCreateRequest;
 import org.vsu.catalogservice.dto.medicie.MedicineResponse;
 import org.vsu.catalogservice.service.MedicineService;
@@ -33,6 +34,11 @@ public class MedicineController {
     @PostMapping
     public ResponseEntity<MedicineResponse> create(@RequestBody @Valid MedicineCreateRequest createRequest, @AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.status(HttpStatus.CREATED).body(medicineService.create(createRequest, jwt));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<MedicineBasicInfo> getById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(medicineService.getById(id));
     }
 
     @GetMapping(NAME)

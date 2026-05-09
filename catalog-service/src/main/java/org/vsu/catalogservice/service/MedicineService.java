@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.vsu.catalogservice.dto.medicie.MedicineBasicInfo;
 import org.vsu.catalogservice.dto.medicie.MedicineCreateRequest;
 import org.vsu.catalogservice.dto.medicie.MedicineResponse;
 import org.vsu.catalogservice.entity.Category;
@@ -58,6 +59,18 @@ public class MedicineService {
                 .orElseThrow(() -> new MedicineNotFoundException(name));
 
         return mapper.mapToResponse(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public MedicineBasicInfo getById(Long id) {
+        Medicine entity = medicineRepository.findById(id)
+                .orElseThrow(() -> new MedicineNotFoundException("id: "+id));
+
+        return MedicineBasicInfo.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .price(entity.getPrice())
+                .build();
     }
 
     @Transactional(readOnly = true)
