@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.vsu.userservice.dto.UserDto;
 import org.vsu.userservice.dto.UserResponse;
-import org.vsu.userservice.entity.Roles;
+import org.vsu.userservice.entity.enums.Roles;
 import org.vsu.userservice.entity.User;
 import org.vsu.userservice.mapper.UserMapper;
 import org.vsu.userservice.repository.UserRepository;

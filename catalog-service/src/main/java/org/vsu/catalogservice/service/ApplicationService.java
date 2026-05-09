@@ -67,19 +67,20 @@ public class ApplicationService {
                 .orElseThrow(() -> new ApplicationNotFoundException(applicationToken));
 
         switch (verdict) {
-            case "APPROVED" -> entity.setStatus(APPROVED);
+            case "APPROVED" -> {
+                entity.setStatus(APPROVED);
+                authServiceClient.assignRoleToUser(
+                        AssignRoleDto.builder()
+                                .keycloakId(entity.getApplicantId().toString())
+                                .roleName("MANUFACTURER")
+                                .build()
+                );
+            }
             case "REJECTED" -> entity.setStatus(REJECTED);
             default -> entity.setStatus(FAILED);
         }
 
         entity = applicationRepository.save(entity);
-
-        authServiceClient.assignRoleToUser(
-                AssignRoleDto.builder()
-                        .keycloakId(entity.getApplicantId().toString())
-                        .roleName("MANUFACTURER")
-                        .build()
-        );
 
         return "Application has been managed! Current status: " + entity.getStatus();
     }
