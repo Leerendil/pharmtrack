@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Category {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

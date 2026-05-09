@@ -8,6 +8,6 @@ import org.vsu.orderservice.dto.MedicineBasicInfo;
 
 @FeignClient(name = "catalog-service", url = "http://localhost:8083", path = "/api/v1/medicines")
 public interface CatalogClientService {
-    @GetMapping("{id}")
+    @GetMapping("/id/{id}")
     ResponseEntity<MedicineBasicInfo> getById(@PathVariable("id") Long id);
 }

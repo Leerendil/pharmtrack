@@ -16,6 +16,7 @@ import java.util.List;
 @Table(name = "manufacturers")
 public class Manufacturer {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

@@ -42,5 +42,6 @@ public class Order {
 
     @Column(name = "created_at")
     @CreationTimestamp
+    @Builder.Default
     private LocalDateTime createdAt;
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderResponse {
-    private UUID orderId;
+    private UUID id;
     private OrderStatus status;
     private LocalDateTime createdAt;
 }
