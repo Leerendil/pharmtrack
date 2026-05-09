@@ -10,6 +10,7 @@ import org.vsu.orderservice.entity.CartItem;
 import org.vsu.orderservice.entity.Order;
 import org.vsu.orderservice.mapper.OrderMapper;
 import org.vsu.orderservice.repository.OrderRepository;
+import org.vsu.orderservice.utils.exceptions.OrderNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -53,8 +54,7 @@ public class OrderService {
 
     public OrderResponse changeOrderStatus(OrderStatusUpdate updateDto) {
         Order entity = orderRepository.findById(updateDto.getOrderId())
-                //TODO: Заменить на свой OrderNotFoundException()
-                .orElseThrow(() -> new RuntimeException("404"));
+                .orElseThrow(() -> new OrderNotFoundException(updateDto.getOrderId()));
 
         entity.setStatus(updateDto.getStatus());
 

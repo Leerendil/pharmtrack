@@ -83,24 +83,24 @@ services:
       - vsu-network
 
   keycloak:
-      image: quay.io/keycloak/keycloak:26.2
-      container_name: keycloak
-      ports:
-        - "${KEYCLOAK_PORT}:8080"
-      command: start-dev
-      environment:
-        KC_DB: postgres
-        KC_DB_URL_HOST: keycloak-db
-        KC_DB_URL_DATABASE: ${KEYCLOAK_DB_NAME}
-        KC_DB_USERNAME: ${DB_USER}
-        KC_DB_PASSWORD: ${DB_PASSWORD}
-        KC_HOSTNAME: localhost
-        KEYCLOAK_ADMIN: admin
-        KEYCLOAK_ADMIN_PASSWORD: admin
-      networks:
-        - vsu-network
-      depends_on:
-        - keycloak-db
+    image: quay.io/keycloak/keycloak:26.2
+    container_name: keycloak
+    ports:
+      - "${KEYCLOAK_PORT}:8080"
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: keycloak-db
+      KC_DB_URL_DATABASE: ${KEYCLOAK_DB_NAME}
+      KC_DB_USERNAME: ${DB_USER}
+      KC_DB_PASSWORD: ${DB_PASSWORD}
+      KC_HOSTNAME: localhost
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    networks:
+      - vsu-network
+    depends_on:
+      - keycloak-db
 
   user-db:
     image: postgres:16-alpine

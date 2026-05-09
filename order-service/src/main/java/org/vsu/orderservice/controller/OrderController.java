@@ -3,6 +3,7 @@ package org.vsu.orderservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,8 +14,10 @@ import org.vsu.orderservice.dto.OrderResponse;
 import org.vsu.orderservice.dto.OrderStatusUpdate;
 import org.vsu.orderservice.service.OrderService;
 
+import static org.vsu.orderservice.utils.constants.CommonConstants.API_V1_ORDERS;
+
 @RestController
-@RequestMapping("/api/v1/orders")
+@RequestMapping(API_V1_ORDERS)
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
@@ -24,6 +27,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.create(jwt));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping
     public ResponseEntity<OrderResponse> changeOrderStatus(OrderStatusUpdate updateDto) {
         return ResponseEntity.ok(orderService.changeOrderStatus(updateDto));

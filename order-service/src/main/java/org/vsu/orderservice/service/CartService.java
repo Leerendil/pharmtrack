@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.vsu.orderservice.entity.CartItem;
+import org.vsu.orderservice.utils.exceptions.FailedToAddItemException;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -53,8 +54,7 @@ public class CartService {
             redisTemplate.opsForHash().put(key(buyerId), medicineId, objectMapper.writeValueAsString(item));
             redisTemplate.expire(key(buyerId), Duration.ofDays(7));
         } catch (Exception e) {
-            //TODO: Заменить на свой FaildeToAddItemException()
-            throw new RuntimeException("500");
+            throw new FailedToAddItemException(e);
         }
 
         return true;

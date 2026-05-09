@@ -14,8 +14,10 @@ import org.vsu.orderservice.service.CartService;
 
 import java.util.List;
 
+import static org.vsu.orderservice.utils.constants.CommonConstants.*;
+
 @RestController
-@RequestMapping("/api/v1/carts")
+@RequestMapping(API_V1_CARTS)
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
@@ -30,12 +32,12 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addItem(jwt, item));
     }
 
-    @DeleteMapping("/selected")
+    @DeleteMapping(SELECTED)
     public ResponseEntity<Boolean> removeListOfItems(@AuthenticationPrincipal  Jwt jwt, @RequestBody int[] ids) {
         return ResponseEntity.ok(cartService.removeListOfItems(jwt, ids));
     }
 
-    @DeleteMapping("/{medicineId}")
+    @DeleteMapping(MEDICINE_ID)
     public ResponseEntity<Boolean> removeItem(@AuthenticationPrincipal  Jwt jwt, @PathVariable("medicineId") String medicineId) {
         return ResponseEntity.ok(cartService.removeItem(jwt, medicineId));
     }
