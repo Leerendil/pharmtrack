@@ -1,20 +1,16 @@
 package org.vsu.catalogservice.events;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.vsu.catalogservice.entity.Application;
 import org.vsu.catalogservice.entity.Outbox;
-import org.vsu.catalogservice.repository.ApplicationRepository;
 import org.vsu.catalogservice.repository.OutboxRepository;
 import org.vsu.catalogservice.utils.exceptions.KafkaMalfunctionExecution;
 
 import java.util.List;
-
-import static org.vsu.catalogservice.utils.constants.CatalogConstants.APPLICATION_TOPIC;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +18,9 @@ import static org.vsu.catalogservice.utils.constants.CatalogConstants.APPLICATIO
 public class KafkaEventPublisher {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final OutboxRepository outboxRepository;
+
+    @Value("${application-topic}")
+    private String APPLICATION_TOPIC;
 
     @Scheduled(fixedDelay = 5000)
     @Transactional

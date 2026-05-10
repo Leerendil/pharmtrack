@@ -1,10 +1,10 @@
-package org.vsu.orderservice.events;
+package org.vsu.notificationservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.vsu.orderservice.entity.enums.OrderStatus;
+import org.vsu.notificationservice.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.Map;

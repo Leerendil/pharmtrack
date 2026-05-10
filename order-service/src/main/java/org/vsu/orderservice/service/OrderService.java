@@ -12,6 +12,7 @@ import org.vsu.orderservice.dto.OrderStatusUpdate;
 import org.vsu.orderservice.entity.CartItem;
 import org.vsu.orderservice.entity.Order;
 import org.vsu.orderservice.entity.Outbox;
+import org.vsu.orderservice.events.OrderEvent;
 import org.vsu.orderservice.mapper.OrderMapper;
 import org.vsu.orderservice.repository.OrderRepository;
 import org.vsu.orderservice.repository.OutboxRepository;
@@ -54,7 +55,15 @@ public class OrderService {
                 .build();
 
         entity = orderRepository.save(entity);
-        outboxService.save(entity);
+        outboxService.save(
+                OrderEvent.builder()
+                        .orderId(entity.getId())
+                        .buyerId(entity.getBuyerId())
+                        .medicinesIds(entity.getMedicinesIds())
+                        .totalPrice(entity.getTotalPrice())
+                        .status(entity.getStatus())
+                        .build()
+        );
 
         cartService.clearCart(jwt);
 

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.vsu.orderservice.entity.Order;
 import org.vsu.orderservice.entity.Outbox;
+import org.vsu.orderservice.events.OrderEvent;
 import org.vsu.orderservice.repository.OutboxRepository;
 import org.vsu.orderservice.utils.exceptions.OutboxMalfunctionException;
 
@@ -18,12 +19,12 @@ public class OutboxService {
     private final ObjectMapper objectMapper;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void save(Order order) {
+    public void save(OrderEvent event) {
         try {
-            String jsonPayload = objectMapper.writeValueAsString(order);
+            String jsonPayload = objectMapper.writeValueAsString(event);
 
             Outbox entity = Outbox.builder()
-                    .orderId(order.getId())
+                    .orderId(event.getOrderId())
                     .payload(jsonPayload)
                     .build();
 

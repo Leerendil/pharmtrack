@@ -1,6 +1,7 @@
 package org.vsu.orderservice.events;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class KafkaEventPublisher {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final OutboxRepository repository;
 
+    @Value("${order-topic}")
+    private String ORDER_TOPIC;
+
     @Scheduled(fixedDelay = 5000)
     public void sendMessage() {
         try {
@@ -27,7 +31,7 @@ public class KafkaEventPublisher {
                 String messageKey = (el.getOrderId().toString());
                 String jsonPayload = el.getPayload();
 
-                kafkaTemplate.send("order-topic", messageKey, jsonPayload);
+                kafkaTemplate.send(ORDER_TOPIC, messageKey, jsonPayload);
             }
 
             repository.deleteAll(list);
