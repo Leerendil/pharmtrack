@@ -11,8 +11,10 @@ import org.vsu.orderservice.dto.OrderResponse;
 import org.vsu.orderservice.dto.OrderStatusUpdate;
 import org.vsu.orderservice.entity.CartItem;
 import org.vsu.orderservice.entity.Order;
+import org.vsu.orderservice.entity.Outbox;
 import org.vsu.orderservice.mapper.OrderMapper;
 import org.vsu.orderservice.repository.OrderRepository;
+import org.vsu.orderservice.repository.OutboxRepository;
 import org.vsu.orderservice.utils.exceptions.ForbiddenActionException;
 import org.vsu.orderservice.utils.exceptions.OrderNotFoundException;
 
@@ -27,6 +29,7 @@ import static org.vsu.orderservice.entity.enums.OrderStatus.*;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final OutboxService outboxService;
     private final OrderMapper orderMapper;
     private final CartService cartService;
 
@@ -51,6 +54,7 @@ public class OrderService {
                 .build();
 
         entity = orderRepository.save(entity);
+        outboxService.save(entity);
 
         cartService.clearCart(jwt);
 

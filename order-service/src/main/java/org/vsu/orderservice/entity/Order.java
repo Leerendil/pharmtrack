@@ -1,5 +1,6 @@
 package org.vsu.orderservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,6 +43,5 @@ public class Order {
 
     @Column(name = "created_at")
     @CreationTimestamp
-    @Builder.Default
     private LocalDateTime createdAt;
 }
