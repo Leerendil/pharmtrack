@@ -36,6 +36,7 @@ public class OrderService {
 
     public OrderResponse create(Jwt jwt) {
         String buyerId = jwt.getSubject();
+        String buyerMail = jwt.getClaimAsString("email");
 
         List<CartItem> cartItems = cartService.getAllCart(jwt);
 
@@ -49,6 +50,7 @@ public class OrderService {
 
         Order entity = Order.builder()
                 .buyerId(UUID.fromString(buyerId))
+                .buyerEmail(buyerMail)
                 .medicinesIds(medicines)
                 .totalPrice(totalPrice)
                 .status(CREATED)
@@ -59,6 +61,7 @@ public class OrderService {
                 OrderEvent.builder()
                         .orderId(entity.getId())
                         .buyerId(entity.getBuyerId())
+                        .buyerEmail(entity.getBuyerEmail())
                         .medicinesIds(entity.getMedicinesIds())
                         .totalPrice(entity.getTotalPrice())
                         .status(entity.getStatus())
@@ -74,13 +77,19 @@ public class OrderService {
         Order entity = orderRepository.findById(updateDto.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException(updateDto.getOrderId()));
 
-        try {
-            entity.setStatus(updateDto.getStatus());
-            entity = orderRepository.save(entity);
-        } catch (Exception e) {
-            entity.setStatus(FAILED);
-            entity = orderRepository.save(entity);
-        }
+        entity.setStatus(updateDto.getStatus());
+        entity = orderRepository.save(entity);
+
+        outboxService.save(
+                OrderEvent.builder()
+                        .orderId(entity.getId())
+                        .buyerId(entity.getBuyerId())
+                        .buyerEmail(entity.getBuyerEmail())
+                        .medicinesIds(entity.getMedicinesIds())
+                        .totalPrice(entity.getTotalPrice())
+                        .status(entity.getStatus())
+                        .build()
+        );
 
         return orderMapper.mapToResponse(entity);
     }

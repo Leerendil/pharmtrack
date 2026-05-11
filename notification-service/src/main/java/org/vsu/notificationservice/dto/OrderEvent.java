@@ -19,6 +19,8 @@ public class OrderEvent {
 
     private UUID buyerId;
 
+    private String buyerEmail;
+
     Map<Long, Integer> medicinesIds;
 
     private OrderStatus status;

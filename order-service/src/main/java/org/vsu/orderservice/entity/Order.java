@@ -27,6 +27,9 @@ public class Order {
     @Column(name = "buyer_id", nullable = false)
     private UUID buyerId;
 
+    @Column(name = "buyer_email", nullable = false)
+    private String buyerEmail;
+
     @ElementCollection
     @CollectionTable(
             name = "order_medicines",

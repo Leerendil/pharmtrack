@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OrderResponse {
     private UUID id;
+    private String buyerEmail;
     private OrderStatus status;
     private LocalDateTime createdAt;
 }
