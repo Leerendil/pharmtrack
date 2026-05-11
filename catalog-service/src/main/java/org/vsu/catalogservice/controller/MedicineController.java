@@ -1,6 +1,5 @@
 package org.vsu.catalogservice.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.vsu.catalogservice.controller.swagger_api.MedicineAPI;
 import org.vsu.catalogservice.dto.medicie.MedicineBasicInfo;
 import org.vsu.catalogservice.dto.medicie.MedicineCreateRequest;
 import org.vsu.catalogservice.dto.medicie.MedicineResponse;
@@ -28,11 +28,11 @@ import static org.vsu.catalogservice.utils.constants.CatalogConstants.*;
 @RestController
 @RequestMapping(API_V1_MEDICINES)
 @RequiredArgsConstructor
-public class MedicineController {
+public class MedicineController implements MedicineAPI {
     private final MedicineService medicineService;
 
     @PostMapping
-    public ResponseEntity<MedicineResponse> create(@RequestBody @Valid MedicineCreateRequest createRequest, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<MedicineResponse> create(@RequestBody MedicineCreateRequest createRequest, @AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.status(HttpStatus.CREATED).body(medicineService.create(createRequest, jwt));
     }
 

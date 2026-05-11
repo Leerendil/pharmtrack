@@ -19,7 +19,7 @@ import static org.vsu.orderservice.utils.constants.CommonConstants.API_V1_ORDERS
 @RestController
 @RequestMapping(API_V1_ORDERS)
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderController implements OrderAPI {
     private final OrderService orderService;
 
     @PostMapping
@@ -34,7 +34,7 @@ public class OrderController {
     }
 
     @PatchMapping
-    public ResponseEntity<OrderResponse> manageOrderStatus(@RequestBody @Valid OrderStatusUpdate updateDto) {
+    public ResponseEntity<OrderResponse> manageOrderStatus(@RequestBody OrderStatusUpdate updateDto) {
         return ResponseEntity.ok(orderService.manageOrderStatus(updateDto));
     }
 

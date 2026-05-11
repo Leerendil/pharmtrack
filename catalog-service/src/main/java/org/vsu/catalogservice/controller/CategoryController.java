@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.vsu.catalogservice.controller.swagger_api.CategoryAPI;
 import org.vsu.catalogservice.dto.category.CategoryCreateRequest;
 import org.vsu.catalogservice.dto.category.CategoryResponse;
 import org.vsu.catalogservice.entity.Category;
@@ -16,11 +17,11 @@ import static org.vsu.catalogservice.utils.constants.CatalogConstants.NAME;
 @RestController
 @RequestMapping(API_V1_CATEGORIES)
 @RequiredArgsConstructor
-public class CategoryController {
+public class CategoryController implements CategoryAPI {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(@RequestBody @Valid CategoryCreateRequest createRequest) {
+    public ResponseEntity<CategoryResponse> create(@RequestBody CategoryCreateRequest createRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.create(createRequest));
     }
 
