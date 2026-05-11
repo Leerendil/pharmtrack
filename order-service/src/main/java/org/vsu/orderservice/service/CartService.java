@@ -33,7 +33,13 @@ public class CartService {
         Map<Object, Object> medicines = redisTemplate.opsForHash().entries(key(buyerId));
 
         return medicines.values().stream()
-                .map(value -> objectMapper.convertValue(value, CartItem.class))
+                .map(value -> {
+                    try {
+                        return objectMapper.readValue(value.toString(), CartItem.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .toList();
     }
 

@@ -30,13 +30,26 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(FailedToAddItemException.class)
-    public ResponseEntity<ErrorResponse> handleFailedToAddItemException(FailedToAddItemException ex) {
+    @ExceptionHandler({
+            FailedToAddItemException.class,
+            OutboxMalfunctionException.class
+    })
+    public ResponseEntity<ErrorResponse> handleFailedToAddItemException(RuntimeException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .responseCode(500)
                 .message(ex.getMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    @ExceptionHandler(KafkaMalfunctionException.class)
+    public ResponseEntity<ErrorResponse> handleKafkaMalfunctionException(KafkaMalfunctionException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .responseCode(503)
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
     }
 }

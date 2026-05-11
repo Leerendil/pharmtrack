@@ -36,7 +36,7 @@ public class MedicineController {
         return ResponseEntity.status(HttpStatus.CREATED).body(medicineService.create(createRequest, jwt));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<MedicineBasicInfo> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(medicineService.getById(id));
     }

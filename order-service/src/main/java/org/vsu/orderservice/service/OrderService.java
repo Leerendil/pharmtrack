@@ -11,8 +11,11 @@ import org.vsu.orderservice.dto.OrderResponse;
 import org.vsu.orderservice.dto.OrderStatusUpdate;
 import org.vsu.orderservice.entity.CartItem;
 import org.vsu.orderservice.entity.Order;
+import org.vsu.orderservice.entity.Outbox;
+import org.vsu.orderservice.events.OrderEvent;
 import org.vsu.orderservice.mapper.OrderMapper;
 import org.vsu.orderservice.repository.OrderRepository;
+import org.vsu.orderservice.repository.OutboxRepository;
 import org.vsu.orderservice.utils.exceptions.ForbiddenActionException;
 import org.vsu.orderservice.utils.exceptions.OrderNotFoundException;
 
@@ -27,11 +30,13 @@ import static org.vsu.orderservice.entity.enums.OrderStatus.*;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final OutboxService outboxService;
     private final OrderMapper orderMapper;
     private final CartService cartService;
 
     public OrderResponse create(Jwt jwt) {
         String buyerId = jwt.getSubject();
+        String buyerMail = jwt.getClaimAsString("email");
 
         List<CartItem> cartItems = cartService.getAllCart(jwt);
 
@@ -45,12 +50,23 @@ public class OrderService {
 
         Order entity = Order.builder()
                 .buyerId(UUID.fromString(buyerId))
+                .buyerEmail(buyerMail)
                 .medicinesIds(medicines)
                 .totalPrice(totalPrice)
                 .status(CREATED)
                 .build();
 
         entity = orderRepository.save(entity);
+        outboxService.save(
+                OrderEvent.builder()
+                        .orderId(entity.getId())
+                        .buyerId(entity.getBuyerId())
+                        .buyerEmail(entity.getBuyerEmail())
+                        .medicinesIds(entity.getMedicinesIds())
+                        .totalPrice(entity.getTotalPrice())
+                        .status(entity.getStatus())
+                        .build()
+        );
 
         cartService.clearCart(jwt);
 
@@ -61,13 +77,19 @@ public class OrderService {
         Order entity = orderRepository.findById(updateDto.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException(updateDto.getOrderId()));
 
-        try {
-            entity.setStatus(updateDto.getStatus());
-            entity = orderRepository.save(entity);
-        } catch (Exception e) {
-            entity.setStatus(FAILED);
-            entity = orderRepository.save(entity);
-        }
+        entity.setStatus(updateDto.getStatus());
+        entity = orderRepository.save(entity);
+
+        outboxService.save(
+                OrderEvent.builder()
+                        .orderId(entity.getId())
+                        .buyerId(entity.getBuyerId())
+                        .buyerEmail(entity.getBuyerEmail())
+                        .medicinesIds(entity.getMedicinesIds())
+                        .totalPrice(entity.getTotalPrice())
+                        .status(entity.getStatus())
+                        .build()
+        );
 
         return orderMapper.mapToResponse(entity);
     }

@@ -1,4 +1,4 @@
-package org.vsu.orderservice.dto;
+package org.vsu.orderservice.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,16 +6,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.vsu.orderservice.entity.enums.OrderStatus;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.util.Map;
 import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderResponse {
-    private UUID id;
+public class OrderEvent {
+    private UUID orderId;
+
+    private UUID buyerId;
+
     private String buyerEmail;
+
+    Map<Long, Integer> medicinesIds;
+
     private OrderStatus status;
-    private LocalDateTime createdAt;
+
+    private BigDecimal totalPrice;
 }

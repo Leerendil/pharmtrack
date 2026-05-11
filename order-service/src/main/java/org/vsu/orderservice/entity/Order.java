@@ -1,5 +1,6 @@
 package org.vsu.orderservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,6 +26,9 @@ public class Order {
 
     @Column(name = "buyer_id", nullable = false)
     private UUID buyerId;
+
+    @Column(name = "buyer_email", nullable = false)
+    private String buyerEmail;
 
     @ElementCollection
     @CollectionTable(

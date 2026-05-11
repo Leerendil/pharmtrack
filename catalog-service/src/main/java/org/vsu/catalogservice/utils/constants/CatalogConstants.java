@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class CatalogConstants {
-    public static final String APPLICATION_TOPIC = "application-topic";
 
     public static final String API_V1_CATEGORIES = "/api/v1/categories";
     public static final String API_V1_MANUFACTURERS = "/api/v1/manufacturers";
