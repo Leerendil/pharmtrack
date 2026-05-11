@@ -15,6 +15,7 @@
         <module>catalog-service</module>
         <module>order-service</module>
         <module>notification-service</module>
+        <module>discovery-service</module>
     </modules>
 
     <properties>
