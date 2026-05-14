@@ -1,4 +1,147 @@
 services:
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "${USER_SERVICE_PORT}:${USER_SERVICE_PORT}"
+    environment:
+      - APP_MAIL=${APP_MAIL}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/${USER_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak:8080/realms/pharmtrack
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+    depends_on:
+      discovery-service:
+        condition: service_started
+      user-db:
+        condition: service_started
+    networks:
+      - vsu-network
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}"
+    environment:
+      - APP_MAIL=${APP_MAIL}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://order-db:5432/${ORDER_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=kafka:29092
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak:8080/realms/pharmtrack
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+      order-db:
+        condition: service_started
+    networks:
+      - vsu-network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
+    environment:
+      - ADMIN_MAIL=${ADMIN_MAIL}
+      - SPRING_MAIL_USERNAME=${APP_MAIL}
+      - SPRING_MAIL_PASSWORD=${EMAIL_APP_PASSWORD}
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=kafka:29092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+    depends_on:
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+    networks:
+      - vsu-network
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    container_name: gateway-service
+    ports:
+      - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+    depends_on:
+      discovery-service:
+        condition: service_started
+    networks:
+      - vsu-network
+
+  discovery-service:
+    build:
+      context: .
+      dockerfile: discovery-service/Dockerfile
+    container_name: discovery-service
+    ports:
+      - "${DISCOVERY_SERVICE_PORT}:${DISCOVERY_SERVICE_PORT}"
+    networks:
+      - vsu-network
+
+  catalog-service:
+    build:
+      context: .
+      dockerfile: catalog-service/Dockerfile
+    container_name: catalog-service
+    ports:
+      - "${CATALOG_SERVICE_PORT}:${CATALOG_SERVICE_PORT}"
+    environment:
+      - APP_MAIL=${APP_MAIL}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://catalog-db:5432/${CATALOG_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=kafka:29092
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak:8080/realms/pharmtrack
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+    depends_on:
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+      catalog-db:
+        condition: service_started
+    networks:
+      - vsu-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
+    environment:
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak:8080/realms/pharmtrack
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+      - KEYCLOAK_SERVER_URL=http://keycloak:8080
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - APP_MAIL=${APP_MAIL}
+    depends_on:
+      discovery-service:
+        condition: service_started
+      keycloak:
+        condition: service_started
+    networks:
+      - vsu-network
+
   order-db:
     image: postgres:16-alpine
     container_name: order-postgres-db
@@ -48,8 +191,10 @@ services:
       CLUSTER_ID: 'MKk37JZqR2eUqJZxNqYzMA'
     volumes:
       - kafka_data:/var/lib/kafka/data
+    networks:
+      - vsu-network
     healthcheck:
-      test: [ "CMD", "bash", "-c", "kafka-broker-api-versions --bootstrap-server localhost:9092" ]
+      test: [ "CMD", "bash", "-c", "echo > /dev/tcp/localhost/9092" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -94,13 +239,14 @@ services:
       KC_DB_URL_DATABASE: ${KEYCLOAK_DB_NAME}
       KC_DB_USERNAME: ${DB_USER}
       KC_DB_PASSWORD: ${DB_PASSWORD}
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: keycloak
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     networks:
       - vsu-network
     depends_on:
-      - keycloak-db
+      keycloak-db:
+        condition: service_started
 
   user-db:
     image: postgres:16-alpine
