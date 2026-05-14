@@ -42,6 +42,7 @@ public class ApplicationService {
 
             String jsonPayload = objectMapper.writeValueAsString(
                     ApplicationEvent.builder()
+                            .applicationId(entity.getId())
                             .name(entity.getName())
                             .country(entity.getCountry())
                             .companyMail(entity.getCompanyMail())

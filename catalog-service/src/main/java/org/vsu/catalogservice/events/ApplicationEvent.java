@@ -13,6 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationEvent {
+    private UUID applicationId;
+
     private String name;
 
     private String country;

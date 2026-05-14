@@ -28,7 +28,7 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<Boolean> addItem(@RequestBody @Valid CartItem item, @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Boolean> addItem(@RequestBody CartItem item, @AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addItem(jwt, item));
     }
 

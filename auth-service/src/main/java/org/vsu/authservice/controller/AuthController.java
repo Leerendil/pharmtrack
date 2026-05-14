@@ -19,22 +19,22 @@ import org.vsu.authservice.service.AuthService;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthAPI{
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterDto registerDto) {
+    public ResponseEntity<UserResponse> register(@RequestBody RegisterDto registerDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerDto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AccessTokenResponse> register(@RequestBody @Valid LoginDto loginDto) {
+    public ResponseEntity<AccessTokenResponse> login(@RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(authService.login(loginDto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/roles/assign")
-    public ResponseEntity<String> assignRoleToUser(@RequestBody @Valid AssignRoleDto roleDto) {
+    public ResponseEntity<String> assignRoleToUser(@RequestBody AssignRoleDto roleDto) {
         return ResponseEntity.ok(authService.assignRoleToUser(roleDto.getKeycloakId(), roleDto.getRoleName()));
     }
 }

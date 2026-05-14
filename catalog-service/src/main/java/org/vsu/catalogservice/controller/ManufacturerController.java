@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.vsu.catalogservice.controller.swagger_api.ManufacturerAPI;
 import org.vsu.catalogservice.dto.manufacturer.ManageApplication;
 import org.vsu.catalogservice.dto.manufacturer.ManufacturerCreateRequest;
 import org.vsu.catalogservice.entity.Manufacturer;
@@ -21,7 +22,7 @@ import static org.vsu.catalogservice.utils.constants.CatalogConstants.*;
 @RestController
 @RequestMapping(API_V1_MANUFACTURERS)
 @RequiredArgsConstructor
-public class ManufacturerController {
+public class ManufacturerController implements ManufacturerAPI {
     private final ManufacturerService manufacturerService;
     private final ApplicationService applicationService;
 
@@ -35,7 +36,7 @@ public class ManufacturerController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(APPLICATION_MANAGE)
-    public ResponseEntity<String> manage(@RequestBody @Valid ManageApplication manageApplication) {
+    public ResponseEntity<String> manage(@RequestBody ManageApplication manageApplication) {
         return ResponseEntity.ok(applicationService.manage(manageApplication.getApplicationToken(), manageApplication.getVerdict()));
     }
 
