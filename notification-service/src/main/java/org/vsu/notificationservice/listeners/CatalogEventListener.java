@@ -27,11 +27,11 @@ public class CatalogEventListener {
             String text = """
                     Hello, a new application for MANUFACTURER status has been submitted.\n
                     User Details:
-                    \n\tApplication Token:\t"""+event.getApplicationId()+"""
-                    \n\tUser ID:\t"""+event.getApplicantId()+"""
-                    \n\tCompany name:\t"""+event.getName()+"""
-                    \n\tCompany email:\t"""+event.getCompanyMail()+"""
-                    \n\tCountry:\t"""+event.getCountry()+"""
+                    \n\tApplication Token:\t""" + event.getApplicationId() + """
+                    \n\tUser ID:\t""" + event.getApplicantId() + """
+                    \n\tCompany name:\t""" + event.getName() + """
+                    \n\tCompany email:\t""" + event.getCompanyMail() + """
+                    \n\tCountry:\t""" + event.getCountry() + """
                     \n\tPlease review the application and take action.
                     """;
 
