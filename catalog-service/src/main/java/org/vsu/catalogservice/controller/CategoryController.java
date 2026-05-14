@@ -11,6 +11,8 @@ import org.vsu.catalogservice.dto.category.CategoryResponse;
 import org.vsu.catalogservice.entity.Category;
 import org.vsu.catalogservice.service.CategoryService;
 
+import java.util.List;
+
 import static org.vsu.catalogservice.utils.constants.CatalogConstants.API_V1_CATEGORIES;
 import static org.vsu.catalogservice.utils.constants.CatalogConstants.NAME;
 
@@ -28,5 +30,10 @@ public class CategoryController implements CategoryAPI {
     @GetMapping(NAME)
     public ResponseEntity<Category> getByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(categoryService.getByName(name));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CategoryResponse>> getAll() {
+        return ResponseEntity.ok(categoryService.getAll());
     }
 }

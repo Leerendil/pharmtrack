@@ -27,11 +27,12 @@ public class CatalogEventListener {
             String text = """
                     Hello, a new application for MANUFACTURER status has been submitted.\n
                     User Details:
-                    \n\tUser ID:"""+event.getApplicantId()+"""
-                    \n\tCompany name: """+event.getName()+"""
-                    \n\tCompany email: """+event.getCompanyMail()+"""
-                    \n\tCountry: """+event.getCountry()+"""
-                    Please review the application and take action.
+                    \n\tApplication Token:\t"""+event.getApplicationId()+"""
+                    \n\tUser ID:\t"""+event.getApplicantId()+"""
+                    \n\tCompany name:\t"""+event.getName()+"""
+                    \n\tCompany email:\t"""+event.getCompanyMail()+"""
+                    \n\tCountry:\t"""+event.getCountry()+"""
+                    \n\tPlease review the application and take action.
                     """;
 
             notificationService.sendMessage(adminMail, subject, text);

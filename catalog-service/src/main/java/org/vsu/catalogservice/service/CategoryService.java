@@ -11,6 +11,8 @@ import org.vsu.catalogservice.repository.CategoryRepository;
 import org.vsu.catalogservice.utils.exceptions.CategoryAlreadyExistsException;
 import org.vsu.catalogservice.utils.exceptions.CategoryNotFoundException;
 
+import java.util.List;
+
 //TODO: Добавить delete() метод
 //TODO: Добавить change() метод
 @Service
@@ -36,6 +38,13 @@ public class CategoryService {
                 .orElseThrow(() -> new CategoryNotFoundException(name));
 
         return entity;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getAll() {
+        return categoryRepository.findAll().stream()
+                .map(mapper::mapToResponse)
+                .toList();
     }
 
 }
