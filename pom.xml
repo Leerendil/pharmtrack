@@ -11,6 +11,12 @@
 
     <modules>
         <module>user-service</module>
+        <module>auth-service</module>
+        <module>catalog-service</module>
+        <module>order-service</module>
+        <module>notification-service</module>
+        <module>discovery-service</module>
+        <module>gateway-service</module>
     </modules>
 
     <properties>
@@ -90,6 +96,13 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>

@@ -1,0 +1,15 @@
+package org.vsu.authservice.clients;
+
+import jakarta.validation.Valid;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.vsu.authservice.dto.UserDto;
+import org.vsu.authservice.dto.UserResponse;
+
+@FeignClient(name = "user-service", path = "/api/v1/users")
+public interface UserServiceClient {
+    @PostMapping
+    ResponseEntity<UserResponse> create(@RequestBody @Valid UserDto userDto);
+}
